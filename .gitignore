@@ -5,3 +5,5 @@
 *.gif
 *.bmp
 __pycache__/
+aes_key.bin
+sample.py
