@@ -2,6 +2,8 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 import os
+import base64
+
 
 KEY_FILE = "aes_key.bin"
 
@@ -29,10 +31,18 @@ def encrypt_data_aes(data):
     padded_data = padder.update(data) + padder.finalize()
 
     encrypted_data = encryptor.update(padded_data) + encryptor.finalize()
-    return iv + encrypted_data  # Prepend IV to encrypted data
+    encrypted_data_iv = iv + encrypted_data
+    encrypted_data_base64 = base64.b64encode(encrypted_data_iv).decode()
+
+    # Without Base64, the encrypted data could break when stored in an image or text file.
+    # Without AES, Base64 alone does not provide security (just encoding, no encryption).
+
+    return encrypted_data_base64
 
 # Function to decrypt data
-def decrypt_data_aes(encrypted_data):
+def decrypt_data_aes(encrypted_data_base64):
+    encrypted_data = base64.b64decode(encrypted_data_base64)
+
     iv = encrypted_data[:16]  # Extract the IV from the encrypted data
     encrypted_content = encrypted_data[16:]
     

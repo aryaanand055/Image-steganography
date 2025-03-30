@@ -1,6 +1,5 @@
-import base64
 from PIL import Image
-from encyprtion import encrypt_data_aes, decrypt_data_aes
+from encryption import encrypt_data_aes, decrypt_data_aes
 
 # Convert encoding data into 8-bit binary
 def genData(data):
@@ -57,18 +56,14 @@ def encode_enc(newimg, data):
 
 # Encode data into image
 def encode_data():
-    img = input("🖼️\t Enter image name (with extension): ")
+    img = input("🖼️ Enter image name (with extension): ")
     image = Image.open(img, 'r')
 
     max_bytes = image.size[0] * image.size[1] // 3
     print(f"ℹ️ The maximum characters that can be encoded are: {max_bytes}")
     
-    input_data = input("🔤 \tEnter data to be encoded: ")
-    encrypted_data = encrypt_data_aes(input_data)
-    
-    # Convert encrypted data to Base64 for safe storage in image
-    encoded_string = base64.b64encode(encrypted_data).decode()
-    
+    input_data = input("🔤 Enter data to be encoded: ")
+    encoded_string = encrypt_data_aes(input_data)
     if len(encoded_string) == 0:
         raise ValueError('❌ Data is empty')
 
@@ -107,16 +102,16 @@ def decode_data():
             break
 
     # Convert Base64 back to encrypted bytes and decrypt
-    decrypted_data = decrypt_data_aes(base64.b64decode(data))
+    decrypted_data = decrypt_data_aes(data)
     return decrypted_data.decode()
 
 def main():
-    a = int(input(":: Welcome to Steganography ::\n"
-                  "1️⃣\t Encode\n2️⃣\t Decode\nMake sure to use only PNG images.\n:"))
+    a = int(input(":: Welcome to Secure image Steganography ::\n"
+                  "1. Encode\n2️. Decode\nMake sure to use only PNG images.\n: "))
     if a == 1:
         encode_data()
     elif a == 2:
-        print("🔍 \tDecoded Message: " + decode_data())
+        print("🔍 Decoded Message: " + decode_data())
     else:
         raise Exception("❌ Enter correct input")
 
