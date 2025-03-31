@@ -1,9 +1,5 @@
-# Ignore images
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.bmp
+
 __pycache__/
+models/
 aes_key.bin
 sample.py
